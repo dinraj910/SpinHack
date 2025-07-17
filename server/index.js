@@ -66,6 +66,37 @@ app.post('/api/spin', async (req, res) => {
   }
 });
 
+// API 3: Check team name availability
+app.post('/api/checkteam', async (req, res) => {
+  try {
+    const { teamName } = req.body;
+
+    if (!teamName || typeof teamName !== 'string') {
+      return res.status(400).json({ message: "Invalid team name" });
+    }
+
+    const teamNameLower = teamName.toLowerCase();
+
+    const team = await Team.findOne({ teamNameLower });
+
+    if (team) {
+      return res.status(200).json({
+        exists: true,
+        topic: team.topic,
+        members: team.members,
+        teamName: team.teamName,
+        message: "Team already registered"
+      });
+    } else {
+      return res.status(200).json({ exists: false,message: "Team not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT} ✅✅✅`);
 })
