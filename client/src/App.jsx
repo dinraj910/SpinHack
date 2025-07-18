@@ -49,7 +49,7 @@ function App() {
   const checkTeamName = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/checkteam',
+        'https://spinhack-1.onrender.com/api/checkteam',
         { teamName },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -153,7 +153,7 @@ function App() {
             const topic = data[prizeNumber].option;
             try {
               const response = await axios.post(
-                'http://localhost:5000/api/spin',
+                'https://spinhack-1.onrender.com/api/spin',
                 {
                   teamName: teamName,
                   members: members,
