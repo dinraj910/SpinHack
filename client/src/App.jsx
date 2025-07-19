@@ -24,10 +24,16 @@ function App() {
   const [prizeNumber, setPrizeNumber] = useState(null);
   const [spinData, setSpinData] = useState("");
   const [backend, setBackend] = useState("");
+  const [buttonVisible, setButtonVisible] = useState(true);
 
   const handleSpinClick = () => {
     if (teamName.trim() === '' || members.length === 0) {
       alert("Please fill both Team Name and Members.");
+      return;
+    }
+
+    const userConfirm  = window.confirm("Are you sure you want to spin the wheel?");
+    if (!userConfirm) {
       return;
     }
 
@@ -168,21 +174,32 @@ function App() {
               if (response.data) {
                 console.log(response.data);
                 setBackend(response.data);
+                setButtonVisible(false);
               }
             } catch (err) {
               console.error("Error:", err);
-              alert("Error registering team");
+              alert("Team Already Registered, You can't Spin Again");
             }
           }}
         />
 
-        <button
+        {buttonVisible ? (
+          <button
+            onClick={handleSpinClick}
+            disabled={mustSpin}
+            className="btn btn-warning btn-lg px-5"
+          >
+            {mustSpin ? "Spinning..." : "🎯 SPIN"}
+          </button>
+        ): null}
+
+        {/* <button
           onClick={handleSpinClick}
           disabled={mustSpin}
           className="btn btn-warning btn-lg px-5"
         >
           {mustSpin ? "Spinning..." : "🎯 SPIN"}
-        </button>
+        </button> */}
 
         {backend && !mustSpin && (
           <h2 className="mt-4 text-success">
